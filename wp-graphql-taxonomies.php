@@ -5,7 +5,7 @@
  * Description: Support for tax_query & custom, customId, customAnd, customIn, customNotIn, customSlugAnd and customSlugIn for custom taxonomies
  * Author: Dakshinamurthy Karra
  * Author URI: https://marathontesting.com
- * Version: 0.1.0
+ * Version: 0.2.0
  * Text Domain: wp-graphql-taxonomies
  * Requires at least: 4.7.0
  * Tested up to: 4.7.1
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'WPGRAPHQL_TAXONOMIES_VERSION', '0.1.0' );
+define( 'WPGRAPHQL_TAXONOMIES_VERSION', '0.2.0' );
 define( 'WPGRAPHQL_TAXONOMIES_WPGRAPHQL_MINIMUM_VERSION', '1.3.5' );
 
 
