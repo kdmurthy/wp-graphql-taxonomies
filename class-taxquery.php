@@ -56,7 +56,10 @@ class TaxQuery {
 		$parsed = $this->parse_type_name( $type_name );
 		if ( ! $parsed ) {
 			// If not a custom post type, use WPGraphQL TaxonomyEnum.
-			$fields['taxQuery'] = array( 'type' => $this->register_types( $type_name, $type_registry, 'TaxonomyEnum' ) );
+			$fields['taxQuery'] = array(
+				'type'        => $this->register_types( $type_name, $type_registry, 'TaxonomyEnum' ),
+				'description' => __( 'Taxonomy query', 'wp-graphql-taxonomies' ),
+			);
 			return $fields;
 		}
 		// phpcs:ignore
@@ -67,7 +70,10 @@ class TaxQuery {
 		}
 		// Create a new TaxonomyEnum specific for this type.
 		$taxonomy_enum          = $this->create_taxonomy_enum( $to_type, array_values( $post_taxonomies ), $type_registry );
-		$fields['taxQuery']     = array( 'type' => $this->register_types( $type_name, $type_registry, $taxonomy_enum ) );
+		$fields['taxQuery']     = array(
+			'type'        => $this->register_types( $type_name, $type_registry, $taxonomy_enum ),
+			'description' => __( 'Taxonomy query', 'wp-graphql-taxonomies' ),
+		);
 		$custom_post_taxonomies = wp_filter_object_list( $post_taxonomies, array( '_builtin' => false ) );
 		if ( ! empty( $custom_post_taxonomies ) ) {
 			foreach ( $custom_post_taxonomies as $tax_name => $tax ) {
@@ -85,8 +91,12 @@ class TaxQuery {
 	 * @return void
 	 */
 	private function register_tax_fields( $tax, &$fields ) {
-		$fields[ $tax->graphql_single_name ]                          = array( 'type' => 'String' );
-		$this->tax_queries[ $tax->graphql_single_name ]               = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name ]                   = array(
+			'type'        => 'String',
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s slug', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name ]        = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'IN',
@@ -94,8 +104,12 @@ class TaxQuery {
 				'terms'    => array( $value ),
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'Id' ]                   = array( 'type' => 'Int' );
-		$this->tax_queries[ $tax->graphql_single_name . 'Id' ]        = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name . 'Id' ]            = array(
+			'type'        => 'Int',
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s id', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name . 'Id' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'IN',
@@ -103,8 +117,12 @@ class TaxQuery {
 				'terms'    => array( $value ),
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'And' ]                  = array( 'type' => array( 'list_of' => 'Int' ) );
-		$this->tax_queries[ $tax->graphql_single_name . 'And' ]       = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name . 'And' ]           = array(
+			'type'        => array( 'list_of' => 'Int' ),
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s ids', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name . 'And' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'AND',
@@ -112,8 +130,12 @@ class TaxQuery {
 				'terms'    => $value,
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'In' ]                   = array( 'type' => array( 'list_of' => 'Int' ) );
-		$this->tax_queries[ $tax->graphql_single_name . 'In' ]        = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name . 'In' ]             = array(
+			'type'        => array( 'list_of' => 'Int' ),
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s ids', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name . 'In' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'IN',
@@ -121,8 +143,12 @@ class TaxQuery {
 				'terms'    => $value,
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'NotIn' ]                = array( 'type' => array( 'list_of' => 'Int' ) );
-		$this->tax_queries[ $tax->graphql_single_name . 'NotIn' ]     = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name . 'NotIn' ]         = array(
+			'type'        => array( 'list_of' => 'Int' ),
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s ids', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name . 'NotIn' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'NOT IN',
@@ -130,8 +156,12 @@ class TaxQuery {
 				'terms'    => $value,
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'SlugAnd' ]              = array( 'type' => array( 'list_of' => 'String' ) );
-		$this->tax_queries[ $tax->graphql_single_name . 'SlugAnd' ]   = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name . 'SlugAnd' ]          = array(
+			'type'        => array( 'list_of' => 'String' ),
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s slugs', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name . 'SlugAnd' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'AND',
@@ -139,8 +169,12 @@ class TaxQuery {
 				'terms'    => $value,
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'SlugIn' ]               = array( 'type' => array( 'list_of' => 'String' ) );
-		$this->tax_queries[ $tax->graphql_single_name . 'SlugIn' ]    = function ( $value ) use ( $tax ) {
+		$fields[ $tax->graphql_single_name . 'SlugIn' ]             = array(
+			'type'        => array( 'list_of' => 'String' ),
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s slugs', 'wp-graphql' ), $tax->name ),
+		);
+		$this->tax_queries[ $tax->graphql_single_name . 'SlugIn' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
 				'operator' => 'IN',
@@ -148,7 +182,11 @@ class TaxQuery {
 				'terms'    => $value,
 			);
 		};
-		$fields[ $tax->graphql_single_name . 'SlugNotIn' ]            = array( 'type' => array( 'list_of' => 'String' ) );
+		$fields[ $tax->graphql_single_name . 'SlugNotIn' ]         = array(
+			'type'        => array( 'list_of' => 'String' ),
+			// translators: the name of the taxonomy.
+			'description' => sprintf( __( 'Use %s slugs', 'wp-graphql' ), $tax->name ),
+		);
 		$this->tax_queries[ $tax->graphql_single_name . 'SlugNotIn' ] = function ( $value ) use ( $tax ) {
 			return array(
 				'taxonomy' => $tax->name,
@@ -290,7 +328,8 @@ class TaxQuery {
 			$type_registry->register_enum_type(
 				$operator_type,
 				array(
-					'values' => array(
+					'description' => __( 'Operator to test', 'wp-graphql' ),
+					'values'      => array(
 						'IN'         => array(
 							'name'  => 'IN',
 							'value' => 'IN',
@@ -333,7 +372,8 @@ class TaxQuery {
 		$type_registry->register_input_type(
 			$type_name . 'Parameters',
 			array(
-				'fields' => array(
+				'description' => __( 'Parameters used for testing', 'wp-graphql' ),
+				'fields'      => array(
 					'taxonomy'        => array(
 						'type' => $taxonomy_enum,
 					),
@@ -358,7 +398,8 @@ class TaxQuery {
 		$type_registry->register_input_type(
 			$tax_query_type,
 			array(
-				'fields' => array(
+				'description' => __( 'Taxonomy query. Use either (relation, relationOperands) or parameters', 'wp-graphql' ),
+				'fields'      => array(
 					'relation'         => array(
 						'type' => 'RelationEnum',
 					),
