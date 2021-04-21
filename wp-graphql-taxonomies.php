@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: WPGraphQL Extensions for Taxonomy
- * Plugin URI: https://github.com/wp-graphql/wp-graphql-tax-query
+ * Plugin URI: https://github.com/kdmurthy/wp-graphql-taxonomies
  * Description: Support for tax_query & custom, customId, customAnd, customIn, customNotIn, customSlugAnd and customSlugIn for custom taxonomies
  * Author: Dakshinamurthy Karra
- * Author URI: https://marathontesting.com
+ * Author URI: https://github.com/kdmurthy/wp-graphql-taxonomies
  * Version: 0.2.0
  * Text Domain: wp-graphql-taxonomies
  * Requires at least: 4.7.0
